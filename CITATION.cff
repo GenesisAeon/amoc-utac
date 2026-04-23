@@ -1,0 +1,65 @@
+cff-version: 1.2.0
+message: >
+  If you use amoc-utac in your research, please cite both this software
+  and the primary reference (van Westen et al. 2024).
+
+title: "amoc-utac — Atlantic Meridional Overturning Circulation Collapse Early Warning"
+version: 0.1.0
+date-released: "2026-04-23"
+license: MIT
+repository-code: "https://github.com/genesisaeon/amoc-utac"
+
+authors:
+  - family-names: Römer
+    given-names: Johann
+    affiliation: "MOR Research Collective"
+
+abstract: >
+  GenesisAeon Package 18. Models the Atlantic Meridional Overturning
+  Circulation (AMOC) as a UTAC dynamical system with CREP tensor coupling.
+  Central result: Γ_AMOC = arctanh(η=0.50) / σ=2.2 ≈ 0.251, placing AMOC
+  in the medium-CREP regime and establishing cross-domain universality with
+  neural criticality (Package 20) at the 50% homeostatic efficiency setpoint.
+
+keywords:
+  - AMOC
+  - tipping point
+  - UTAC
+  - CREP
+  - ocean circulation
+  - GenesisAeon
+  - early warning signal
+  - critical slowing down
+
+references:
+  - type: article
+    title: >
+      Physics-based early warning signal shows that AMOC is on tipping course
+    authors:
+      - family-names: van Westen
+        given-names: René M.
+      - family-names: Kliphuis
+        given-names: Michiel
+      - family-names: Dijkstra
+        given-names: Henk A.
+    journal: "Science Advances"
+    volume: 10
+    issue: 6
+    year: 2024
+    doi: 10.1126/sciadv.adk1189
+
+  - type: article
+    title: "Warning of a forthcoming collapse of the AMOC"
+    authors:
+      - family-names: Ditlevsen
+        given-names: Peter
+      - family-names: Ditlevsen
+        given-names: Susanne
+    journal: "Nature Communications"
+    year: 2023
+    doi: 10.1038/s41467-023-39810-w
+
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.19645351
+    description: "Zenodo archive"

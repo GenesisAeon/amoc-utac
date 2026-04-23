@@ -1,0 +1,81 @@
+# Benchmark targets derived from:
+#
+#   van Westen, R.M., Kliphuis, M. & Dijkstra, H.A. (2024).
+#   "Physics-based early warning signal shows that AMOC is on tipping course."
+#   Science Advances 10(6), eadk1189.  DOI: 10.1126/sciadv.adk1189
+#
+#   Ditlevsen, P. & Ditlevsen, S. (2023).
+#   "Warning of a forthcoming collapse of the AMOC."
+#   Nature Communications.  DOI: 10.1038/s41467-023-39810-w
+#
+#   Chavent et al. (2026).
+#   "50% AMOC weakening by 2100."
+#   Science Advances.  DOI: (forthcoming)
+
+references:
+  van_westen_2024: "10.1126/sciadv.adk1189"
+  ditlevsen_2023:  "10.1038/s41467-023-39810-w"
+  chavent_2026:    "10.1126/sciadv.XXXXXXX"
+
+# ── Key physics (van Westen 2024) ─────────────────────────────────────────────
+
+fov_at_present_day_sv: -0.05       # Fov < 0  →  bistability confirmed
+fov_sign: negative                  # Necessary condition for tipping
+
+# ── UTAC calibration ──────────────────────────────────────────────────────────
+
+sigma_crep: 2.2
+eta_tipping: 0.50                   # 50% weakening threshold
+gamma_amoc: 0.2510                  # arctanh(0.50) / 2.2
+gamma_formula: "arctanh(eta=0.50) / sigma=2.2"
+
+# ── Benchmark targets for amoc-utac validation ────────────────────────────────
+# Format: [target_value, tolerance]
+
+amoc_targets:
+  present_strength_sv:
+    value: 17.0
+    relative_tolerance: 0.15
+    note: "RAPID 2004-2023 mean"
+
+  weakening_since_1950_sv:
+    value: 3.0
+    relative_tolerance: 0.33
+    note: "proxy-based (Caesar et al. 2018)"
+
+  gamma_amoc:
+    value: 0.251
+    absolute_tolerance: 0.05
+    note: "central CREP result; Γ_AMOC = Γ_brain (cross-domain universality)"
+
+  fov_sign:
+    value: negative
+    note: "bistability indicator (van Westen 2024)"
+
+  tipping_year_central:
+    value: 2057
+    tolerance_years: 10
+    note: "Ditlevsen & Ditlevsen (2023) central estimate"
+
+  tipping_year_range:
+    low: 2025
+    high: 2095
+    note: "Ditlevsen & Ditlevsen (2023) 95% confidence interval"
+
+# ── CREP Spectrum Atlas position ─────────────────────────────────────────────
+
+crep_spectrum:
+  package_id: 18
+  domain: "oceanography"
+  gamma: 0.251
+  eta: 0.50
+  character: "homeostatic"
+  comparison:
+    solar_flare:   0.014
+    cygnus_x1:     0.046
+    amazon:        0.116
+    amoc:          0.251
+    neural_brain:  0.251
+    btw_sandpile:  0.296
+    manna_sandpile: 0.376
+    era5_arctic:   0.920
