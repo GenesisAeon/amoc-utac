@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 
-from amoc_utac.constants import AMOC_TARGETS, GAMMA_AMOC, UTAC_SIGMA
+from amoc_utac.constants import AMOC_TARGETS, UTAC_SIGMA
 
 
 class AmocBenchmark:

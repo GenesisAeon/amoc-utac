@@ -77,8 +77,8 @@ class EthicsGate:
             "reason": reason,
             "tension": tension_value,
             "caveats": caveats,
-            "gamma": state.get("Gamma", None),
-            "H_normalised": state.get("H_normalised", None),
+            "gamma": state.get("Gamma"),
+            "H_normalised": state.get("H_normalised"),
         }
         self._history.append(record)
         return record

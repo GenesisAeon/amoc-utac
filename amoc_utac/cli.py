@@ -33,7 +33,8 @@ def run(
 
     console.print(
         Panel(
-            f"[bold blue]AMOC-UTAC[/bold blue]  ·  Package 18  ·  Scenario: [cyan]{scenario}[/cyan]",
+            f"[bold blue]AMOC-UTAC[/bold blue]  ·  Package 18  ·  "
+            f"Scenario: [cyan]{scenario}[/cyan]",
             expand=False,
         )
     )

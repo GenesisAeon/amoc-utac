@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import numpy as np
 
-from amoc_utac.constants import GAMMA_AMOC
-
 
 class TensionMetric:
     """

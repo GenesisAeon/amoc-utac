@@ -22,8 +22,8 @@ References:
     Chavent et al. (2026). Sci. Adv.
 """
 
-from amoc_utac.system import AmocUTAC
 from amoc_utac.constants import GAMMA_AMOC, PACKAGE_REGISTRY_18
+from amoc_utac.system import AmocUTAC
 
 __version__ = "0.1.0"
 __all__ = ["AmocUTAC", "GAMMA_AMOC", "PACKAGE_REGISTRY_18"]

@@ -171,10 +171,7 @@ class TippingPredictor:
         intercept = float(result.intercept)
 
         target_sv = 0.50 * float(amoc_series[-1])
-        if slope < 0.0:
-            crossing_year = float((target_sv - intercept) / slope)
-        else:
-            crossing_year = float("inf")
+        crossing_year = float((target_sv - intercept) / slope) if slope < 0.0 else float("inf")
 
         return {
             "trend_sv_per_year": slope,

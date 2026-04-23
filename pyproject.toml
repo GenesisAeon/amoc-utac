@@ -69,7 +69,7 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "B", "I", "W", "UP", "C4", "SIM"]
-ignore = ["B008"]
+ignore = ["B008", "UP017"]  # UP017: datetime.UTC not available as class attr in Python 3.11
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101"]
