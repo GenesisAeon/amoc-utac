@@ -1,0 +1,38 @@
+# RAPID-MOCHA 26°N Array — Summary Statistics
+# Source:  https://rapid.ac.uk/rapidmoc/rapid_data/datadl.php
+# Period:  April 2004 – December 2023  (19 years)
+# Licence: RAPID public data (UK NERC)
+#
+# References:
+#   Cunningham et al. (2007). Science 317, 935-938.
+#   McCarthy et al.  (2012). Geophys. Res. Lett. 39, L19609.
+#   Smeed et al.     (2018). Ocean Sci. 14, 111-124.
+#   Moat et al.      (2024). Geophys. Res. Lett. (2024 update).
+
+source: "RAPID-MOCHA 26°N array"
+period: "2004-2023"
+
+# Annual-mean AMOC strength at 26°N [Sv]
+mean_sv: 17.0
+std_sv:   4.0
+min_sv:   4.0     # recorded during extreme event ~2009-2010
+max_sv:  31.0
+
+# Observed linear trend [Sv per decade]
+# Note: trend is noisy; some studies report −0.5 Sv/decade, others near-zero.
+trend_sv_per_decade: -0.5
+n_years: 19
+
+# Key RAPID component transports (approximate annual means [Sv])
+components:
+  florida_current:  31.6   # Cable measurement through Florida Straits
+  ekman_transport:   3.2   # Wind-driven Ekman layer
+  upper_mid_ocean: -17.8   # Geostrophic interior (upper 1000 m)
+  lnadw:           -12.0   # Lower North Atlantic Deep Water return
+
+# amoc-utac calibration values derived from RAPID
+calibration:
+  K_eff_sv: 18.0           # Present-day reference strength used as K
+  r_per_year: 0.08         # Intrinsic recovery rate (estimated from CESM)
+  gamma_amoc: 0.2510       # CREP Γ from η=0.50 inversion
+  eta_tipping: 0.50        # 50% weakening projection (Chavent et al. 2026)
