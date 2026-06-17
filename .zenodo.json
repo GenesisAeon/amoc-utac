@@ -1,33 +1,33 @@
 {
-  "title": "amoc-utac v0.1.0: UTAC Analysis of Atlantic Meridional Overturning Circulation Tipping",
-  "version": "0.1.0",
-  "upload_type": "software",
-  "access_right": "open",
-  "language": "eng",
+  "title": "amoc-utac — P18: AMOC collapse early warning — GenesisAeon Package 18 (UTAC/CREP dynamical system)",
+  "description": "<p>AMOC collapse early warning — GenesisAeon Package 18 (UTAC/CREP dynamical system). The UTAC-Logistic ODE identifies critical thresholds in Atlantic Meridional Overturning Circulation (AMOC) strength time series, enabling early-warning detection of potential collapse events; CREP metrics characterise coherence and emergence in thermohaline circulation dynamics.</p><p>Part of the <strong>GenesisAeon</strong> ecosystem (P18, domain: oceanography / AMOC tipping). Within the GenesisAeon CREP Criticality Spectrum, this package's characteristic coupling value is Γ ≈ 0.251.</p><p>See <a href=\"https://github.com/GenesisAeon/amoc-utac\">github.com/GenesisAeon/amoc-utac</a> for source, documentation, and reproducibility notebooks.</p>",
   "creators": [
     {
       "name": "Römer, Johann",
-      "affiliation": "GenesisAeon (Independent Researcher)"
+      "affiliation": "Independent Researcher / MOR Research Collective"
     }
   ],
-  "description": "amoc-utac v0.1.0 applies UTAC (Universal Threshold Activation Criticality) to the Atlantic Meridional Overturning Circulation (AMOC), a major tipping element of the Earth climate system. The UTAC-Logistic ODE identifies critical thresholds in AMOC strength time series, enabling early-warning detection of potential collapse events. CREP metrics characterise coherence and emergence in thermohaline circulation dynamics. Part of the GenesisAeon UTAC application suite (genesis-os). Dual-licensed: GPLv3-or-later (code) + CC BY 4.0 (documentation).",
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open",
   "keywords": [
-    "genesis-aeon", "utac", "crep", "criticality", "self-organized-criticality",
-    "mirror-machine", "fractal", "amoc", "climate-tipping-point",
-    "thermohaline-circulation", "early-warning", "emergence"
+    "GenesisAeon",
+    "P18",
+    "oceanography / AMOC tipping",
+    "UTAC",
+    "CREP",
+    "open science"
   ],
-  "license": "GPL-3.0-or-later",
   "related_identifiers": [
     {
-      "identifier": "https://doi.org/10.5281/zenodo.19645351",
+      "identifier": "10.5281/zenodo.19645351",
       "relation": "isPartOf",
-      "scheme": "doi",
-      "resource_type": "publication-article"
-    },
-    {
-      "identifier": "https://github.com/GenesisAeon/amoc-utac",
-      "relation": "isSupplementTo",
-      "scheme": "url"
+      "resource_type": "publication-article",
+      "scheme": "doi"
     }
+  ],
+  "version": "1.0.0",
+  "communities": [
+    { "identifier": "genesisaeon" }
   ]
 }
