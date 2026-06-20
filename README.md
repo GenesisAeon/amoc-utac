@@ -17,6 +17,12 @@
 ## Installation
 
 ```bash
+pip install amoc-utac
+```
+
+For development:
+
+```bash
 pip install -e ".[dev]"
 ```
 
