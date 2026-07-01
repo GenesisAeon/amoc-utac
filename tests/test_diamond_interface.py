@@ -5,6 +5,8 @@ from __future__ import annotations
 import math
 
 import pytest
+from diamond_setup.protocol import NotConvergedError
+from diamond_setup.validation import validate_diamond_instance
 
 from amoc_utac.system import AmocUTAC
 
@@ -14,6 +16,20 @@ def amoc() -> AmocUTAC:
     system = AmocUTAC(seed=42)
     system.run_cycle(duration_years=60)
     return system
+
+
+# ── Diamond protocol compliance ───────────────────────────────────────────────
+
+
+def test_not_converged_before_run_cycle():
+    pkg = AmocUTAC(seed=42)
+    with pytest.raises(NotConvergedError):
+        pkg.get_crep_state()
+
+
+def test_validate_diamond_instance():
+    pkg = AmocUTAC(seed=42)
+    assert validate_diamond_instance(pkg) == []
 
 
 # ── run_cycle ────────────────────────────────────────────────────────────────
@@ -26,8 +42,17 @@ def test_run_cycle_returns_dict():
 
 def test_run_cycle_has_required_keys():
     result = AmocUTAC(seed=42).run_cycle(duration_years=30)
-    for key in ("years", "amoc_sv", "fov", "crep_state", "utac_state",
-                "utac_trajectory", "phase_events", "ethics"):
+    for key in (
+        "years",
+        "amoc_sv",
+        "fov",
+        "crep_state",
+        "utac_state",
+        "utac_extended",
+        "utac_trajectory",
+        "phase_events",
+        "ethics",
+    ):
         assert key in result, f"Missing key: {key}"
 
 
@@ -53,13 +78,6 @@ def test_get_crep_state_range(amoc: AmocUTAC):
 
 
 def test_gamma_is_in_medium_crep_range(amoc: AmocUTAC):
-    """Γ_AMOC should be in the medium-CREP regime (0.05 – 0.75).
-
-    Synthetic RAPID data may produce Γ slightly away from the theoretical
-    calibration target of 0.251 (which is derived from the η-inversion formula,
-    not from the CREP component weights). The formula test below checks the exact
-    analytical result.
-    """
     gamma = amoc.get_crep_state()["Gamma"]
     assert 0.05 <= gamma <= 0.75, f"Γ = {gamma} outside medium-CREP zone"
 
@@ -69,17 +87,24 @@ def test_gamma_is_in_medium_crep_range(amoc: AmocUTAC):
 
 def test_get_utac_state_keys(amoc: AmocUTAC):
     state = amoc.get_utac_state()
-    for key in ("H", "dH_dt", "H_star", "K_eff"):
-        assert key in state
+    assert set(state.keys()) == {"H", "H_star", "K_eff"}
 
 
-def test_utac_h_positive(amoc: AmocUTAC):
-    assert amoc.get_utac_state()["H"] > 0.0
-
-
-def test_utac_h_star_less_than_k(amoc: AmocUTAC):
+def test_utac_h_normalized(amoc: AmocUTAC):
     state = amoc.get_utac_state()
-    assert state["H_star"] < state["K_eff"]
+    assert 0.0 < state["H"] <= 1.0
+
+
+def test_utac_h_star_is_normalised_setpoint(amoc: AmocUTAC):
+    state = amoc.get_utac_state()
+    assert 0.0 < state["H_star"] <= 1.0
+    assert state["K_eff"] == amoc.K
+
+
+def test_utac_extended_has_dh_dt(amoc: AmocUTAC):
+    extended = amoc._utac_internal
+    assert extended is not None
+    assert "dH_dt" in extended
 
 
 # ── get_phase_events ─────────────────────────────────────────────────────────
@@ -124,8 +149,13 @@ def test_to_zenodo_record_ethics_present(amoc: AmocUTAC):
 
 def test_predict_tipping_year_keys(amoc: AmocUTAC):
     pred = amoc.predict_tipping_year()
-    for key in ("utac_central_year", "utac_5pct", "utac_95pct",
-                "ditlevsen_2023_central", "gamma_amoc"):
+    for key in (
+        "utac_central_year",
+        "utac_5pct",
+        "utac_95pct",
+        "ditlevsen_2023_central",
+        "gamma_amoc",
+    ):
         assert key in pred
 
 
@@ -137,13 +167,12 @@ def test_ditlevsen_reference_year(amoc: AmocUTAC):
 
 
 def test_gamma_amoc_formula():
-    """Package 18 central result: arctanh(0.50) / 2.2 ≈ 0.251 (rounded from 0.2497)."""
     gamma = math.atanh(0.50) / 2.2
-    assert abs(gamma - 0.251) < 0.002   # 0.2497 rounds to 0.250 ≈ 0.251
+    assert abs(gamma - 0.251) < 0.002
 
 
 def test_crep_spectrum_entry():
     entry = AmocUTAC.crep_spectrum_entry()
     assert entry["package_id"] == 18
-    assert abs(entry["gamma"] - 0.251) < 0.002   # stored as 0.2497 ≈ 0.251
+    assert abs(entry["gamma"] - 0.251) < 0.002
     assert entry["eta"] == 0.50

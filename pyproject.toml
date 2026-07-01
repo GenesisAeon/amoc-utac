@@ -1,6 +1,6 @@
 [project]
 name = "amoc-utac"
-version = "1.0.0"
+version = "1.1.0"
 description = "AMOC collapse early warning — GenesisAeon Package 18 (UTAC/CREP dynamical system)"
 readme = "README.md"
 license = { text = "MIT" }
@@ -27,6 +27,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Atmospheric Science",
 ]
 dependencies = [
+    "diamond-setup>=2.1.0",
     "numpy>=1.26",
     "scipy>=1.13",
     "matplotlib>=3.9",
