@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-07-18
+### Fixed
+- CI release pipeline: removed the workflow-level `id-token: write`
+  permission from `release.yml`. With it granted,
+  `pypa/gh-action-pypi-publish` prefers OIDC Trusted Publishing over the
+  supplied `password:` whenever an OIDC token is available, regardless
+  of whether a valid `PYPI_API_TOKEN`/`TEST_PYPI_API_TOKEN` secret is
+  also passed — and this repo's PyPI project was never registered as a
+  Trusted Publisher, so every automated release since `v1.0.0` had its
+  publish step fail (masked because releases were always shipped
+  manually via `twine` instead, see `mandala/HANDOVER.md`). Identical
+  bug found and fixed in `genesis-os/release.yml` the same day
+  (`v1.0.9`→`v1.0.10`); applying the same fix here now that this repo's
+  `PYPI_API_TOKEN`/`TEST_PYPI_API_TOKEN` secrets are actually configured
+  (both repo-level and on the `pypi`/`testpypi` Environments).
+- This tag is the live, real-tag verification that automated PyPI
+  publishing now actually works for this package. No functional/API
+  change.
+
 ## [1.1.0] - 2026-07-01
 ### Changed
 - `AmocUTAC` subclasses `diamond_setup.DiamondPackage` (Diamond Protocol v2.1.0).

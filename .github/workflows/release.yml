@@ -10,7 +10,16 @@ on:
 
 permissions:
   contents: write
-  id-token: write   # for PyPI trusted publishing, if configured
+  # No id-token: write here on purpose. pypa/gh-action-pypi-publish prefers
+  # OIDC Trusted Publishing over the supplied `password:` whenever an OIDC
+  # token is available (i.e. whenever this permission is granted) - and
+  # this repo's PyPI project is not registered as a Trusted Publisher, so
+  # granting it just makes the publish step fail with
+  # "invalid-publisher: valid token, but no corresponding publisher"
+  # instead of using the PYPI_API_TOKEN/TEST_PYPI_API_TOKEN Environment
+  # secrets that are actually configured. Found and fixed the identical
+  # bug in genesis-os/release.yml on 2026-07-18 (v1.0.9->v1.0.10); see
+  # mandala/HANDOVER.md.
 
 jobs:
   build:
