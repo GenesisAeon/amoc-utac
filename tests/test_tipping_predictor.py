@@ -82,6 +82,16 @@ def test_5pct_le_central_le_95pct(predictor: TippingPredictor):
     assert pred["utac_central_year"] <= pred["utac_95pct"]
 
 
+def test_ipcc_ar6_consensus_context_present(predictor: TippingPredictor):
+    """Added 2026-08-01: Ditlevsen 2023 is a real but more alarmist single
+    study than the IPCC AR6 consensus -- both must be surfaced together."""
+    pred = predictor.predict_tipping_year()
+    assert "ipcc_ar6_confidence_statement" in pred
+    assert "before 2100" in pred["ipcc_ar6_confidence_statement"]
+    assert "ipcc_ar6_citation" in pred
+    assert "consensus_note" in pred
+
+
 # ── Statistical extrapolation ─────────────────────────────────────────────────
 
 

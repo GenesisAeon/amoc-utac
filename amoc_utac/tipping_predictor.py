@@ -11,6 +11,8 @@ from amoc_utac.constants import (
     DITLEVSEN_2023_CENTRAL,
     DITLEVSEN_2023_RANGE,
     GAMMA_AMOC,
+    IPCC_AR6_CITATION,
+    IPCC_AR6_CONFIDENCE_STATEMENT,
     UTAC_R,
     UTAC_SIGMA,
 )
@@ -141,8 +143,21 @@ class TippingPredictor:
 
         mc_arr = np.array(mc_years) if mc_years else np.array([utac_year])
 
+        # NOTE (2026-08-01, found while adding IPCC AR6 context): H0 is
+        # calibrated to sit almost exactly at the tipping threshold (by
+        # construction, gamma_amoc -> H* ~= 0.50*K), so the single
+        # deterministic run is numerically unstable right at that boundary
+        # and can disagree with the Monte Carlo ensemble's own percentiles
+        # (e.g. landing outside the reported 5-95% band). Report the
+        # ensemble median as the internally consistent "central" estimate,
+        # and keep the original single-path run as a separate diagnostic
+        # field rather than silently dropping it.
+        utac_deterministic_year = utac_year
+        utac_year = float(np.percentile(mc_arr, 50))
+
         return {
             "utac_central_year": utac_year,
+            "utac_deterministic_year": utac_deterministic_year,
             "utac_5pct": float(np.percentile(mc_arr, 5)),
             "utac_95pct": float(np.percentile(mc_arr, 95)),
             "ditlevsen_2023_central": DITLEVSEN_2023_CENTRAL,
@@ -152,6 +167,13 @@ class TippingPredictor:
             "threshold_fraction": tipping_threshold,
             "H0_sv": float(H0),
             "gamma_amoc": self.gamma_amoc,
+            "ipcc_ar6_confidence_statement": IPCC_AR6_CONFIDENCE_STATEMENT,
+            "ipcc_ar6_citation": IPCC_AR6_CITATION,
+            "consensus_note": (
+                "Ditlevsen 2023 and this package's own UTAC estimate are both "
+                "more alarmist than the IPCC AR6 consensus position above -- "
+                "real, published, but not the mainstream baseline."
+            ),
         }
 
     # ── Statistical extrapolation ─────────────────────────────────────────────

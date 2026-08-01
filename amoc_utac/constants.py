@@ -36,6 +36,21 @@ DITLEVSEN_2023_CENTRAL: int = 2057
 DITLEVSEN_2023_RANGE: tuple[int, int] = (2025, 2095)
 CHAVENT_2026_WEAKENING_BY: int = 2100
 
+# ── IPCC AR6 consensus position (added 2026-08-01) ───────────────────────────
+# Ditlevsen & Ditlevsen (2023, Nat. Commun. 14, 4254) is a single, statistically
+# noteworthy reanalysis-based study -- real, but NOT the IPCC consensus. The
+# IPCC AR6 WG1 Summary for Policymakers (2021) itself assesses an abrupt AMOC
+# collapse before 2100 as "very unlikely", stating "medium confidence that
+# there will not be an abrupt collapse before 2100". Both positions are real;
+# this package's DITLEVSEN_2023_CENTRAL tipping-year estimate is the more
+# alarmist of the two, not the consensus baseline. See DISCLAIMER.md.
+IPCC_AR6_CONFIDENCE_STATEMENT: str = (
+    "medium confidence that there will not be an abrupt collapse before 2100"
+)
+IPCC_AR6_CITATION: str = (
+    "IPCC AR6 Working Group I, Summary for Policymakers (2021)"
+)
+
 # ── Package registry ─────────────────────────────────────────────────────────
 PACKAGE_REGISTRY_18: dict = {
     "name": "amoc-utac",

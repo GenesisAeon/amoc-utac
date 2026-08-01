@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-08-01
+### Added
+- IPCC AR6 WG1 SPM (2021) consensus context surfaced alongside the Ditlevsen
+  & Ditlevsen (2023) tipping-year estimate in `predict_tipping_year()`
+  (`ipcc_ar6_confidence_statement`, `ipcc_ar6_citation`, `consensus_note`)
+  and in the `tipping-estimate` CLI table -- Ditlevsen 2023 is real but more
+  alarmist than the IPCC's own "medium confidence that there will not be an
+  abrupt collapse before 2100" assessment; both are now shown together
+  instead of only the former. See README.md's new "Scientific Context"
+  section.
+### Fixed
+- `predict_tipping_year()`: the deterministic single-path "central" estimate
+  could fall outside its own reported 5-95% Monte Carlo band, because `H0`
+  is calibrated to sit almost exactly at the tipping threshold, making the
+  single deterministic run numerically unstable right at that boundary.
+  `utac_central_year` now reports the internally consistent ensemble
+  median; the original single-path value is preserved as
+  `utac_deterministic_year`.
+- CI (`ruff check amoc_utac tests`) was broken by a prior automated DOI-badge
+  commit that dropped trailing newlines from two files -- restored.
+
 ## [1.1.1] - 2026-07-18
 ### Fixed
 - CI release pipeline: removed the workflow-level `id-token: write`

@@ -123,6 +123,11 @@ def tipping_estimate(
         f"≤ {pred['chavent_2026_50pct_by']}",
         "50% weakening threshold",
     )
+    table.add_row(
+        "IPCC AR6 WG1 SPM (2021)",
+        "no abrupt collapse",
+        pred["ipcc_ar6_confidence_statement"],
+    )
 
     console.print(table)
     console.print(
@@ -130,6 +135,7 @@ def tipping_estimate(
         f"(H₀ = {pred['H0_sv']:.1f} Sv, "
         f"H* threshold = {pred['threshold_sv']:.1f} Sv)"
     )
+    console.print(f"\n[dim]{pred['consensus_note']}[/dim]")
 
 
 @app.command(name="zenodo-export")

@@ -51,6 +51,20 @@ Validated against RAPID array, van Westen 2024 & Ditlevsen 2023.
 
 AMOC crosses 50 % weakening (H* = 0.5 K) between 2045–2065.
 
+## Scientific Context — Consensus vs. Single Studies (added 2026-08-01)
+
+The Ditlevsen & Ditlevsen (2023) tipping-year estimate this package compares
+against (central 2057, range 2025–2095) is a **real, published, but more
+alarmist single study**, not the mainstream consensus. The **IPCC AR6 Working
+Group I Summary for Policymakers (2021)** itself assesses an abrupt AMOC
+collapse before 2100 as "very unlikely", stating **medium confidence that
+there will not be an abrupt collapse before 2100**. Both positions are real
+and are now surfaced together in `predict_tipping_year()`'s return value
+(`ipcc_ar6_confidence_statement`, `ipcc_ar6_citation`, `consensus_note`) and
+in the `tipping-estimate` CLI command's output table, so users see the
+consensus baseline alongside this package's own (more alarmist) UTAC
+estimate rather than only the latter.
+
 ## Role in the GenesisAeon Ecosystem
 
 `amoc-utac` is **P18** in the GenesisAeon ecosystem, covering the
