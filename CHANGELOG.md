@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-08-02
+### Fixed
+- **Ditlevsen & Ditlevsen (2023) was itself corrected in 2025** (Author
+  Correction, Nat. Commun. 16, 7794, DOI `10.1038/s41467-025-63201-y`):
+  central tipping-year estimate moved from 2057 [2025-2095] to **2065
+  [2037-2109]**. This package previously cited the superseded 2057 figure;
+  `DITLEVSEN_2023_CENTRAL`/`DITLEVSEN_2023_RANGE` and all dependent
+  benchmark targets/tests now use the corrected values. Found via a
+  dedicated DeepResearch meta-analysis of AMOC tipping-risk literature
+  (2026-08-02).
+- Corrected an imprecise AR6 wording: the SPM (Section C.3.4) does not
+  literally say "very unlikely" attached to "collapse before 2100" --
+  that's a common but inexact public-communication shorthand. The exact
+  SPM sentence is "medium confidence that ... will not collapse abruptly
+  before 2100"; "very likely" in the same passage describes the assessed
+  *weakening*, not an exclusion of collapse.
+### Added
+- AR6's own quantified weakening-by-2100 figures (`AR6_WEAKENING_SSP126_PCT`,
+  `AR6_WEAKENING_SSP585_PCT`: 24% [4-46%] and 39% [17-55%] respectively) --
+  real assessed projections, not a collapse probability.
+- Noted a 2026 preprint (Morr et al., arXiv:2604.20341, not yet peer
+  reviewed) that substantively challenges the Ditlevsen fingerprint/model
+  choice's robustness -- flagged as context, not adopted as a replacement
+  value.
+### Known follow-up (not done in this pass)
+- The AMOC meta-analysis recommends replacing the single
+  `collapse_year`-style framing with ~11 separate evidence-object fields
+  (`formal_assessment`, `assessed_weakening`, `direct_observation`,
+  `historical_reconstruction`, `statistical_tipping_estimate`,
+  `physical_early_warning`, `model_tipping_onset`, `long_horizon_shutdown`,
+  `constrained_projection_high/low`, `methodological_challenge`) each with
+  measurement type, collapse definition, time horizon, peer-review status,
+  and consensus status. This is a larger structural refactor, tracked as a
+  follow-up, not done in this pass -- see `KlimaAktuell/deep-research-report2.md`.
+
 ## [1.2.0] - 2026-08-01
 ### Added
 - IPCC AR6 WG1 SPM (2021) consensus context surfaced alongside the Ditlevsen

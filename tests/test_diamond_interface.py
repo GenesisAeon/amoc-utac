@@ -160,7 +160,7 @@ def test_predict_tipping_year_keys(amoc: AmocUTAC):
 
 
 def test_ditlevsen_reference_year(amoc: AmocUTAC):
-    assert amoc.predict_tipping_year()["ditlevsen_2023_central"] == 2057
+    assert amoc.predict_tipping_year()["ditlevsen_2023_central"] == 2065
 
 
 # ── Central formula verification ─────────────────────────────────────────────

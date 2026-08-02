@@ -67,7 +67,7 @@ def test_predict_tipping_year_keys(predictor: TippingPredictor):
 
 
 def test_ditlevsen_reference(predictor: TippingPredictor):
-    assert predictor.predict_tipping_year()["ditlevsen_2023_central"] == 2057
+    assert predictor.predict_tipping_year()["ditlevsen_2023_central"] == 2065
 
 
 def test_utac_tipping_plausible_range(predictor: TippingPredictor):

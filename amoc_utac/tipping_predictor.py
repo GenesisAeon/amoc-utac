@@ -31,7 +31,8 @@ class TippingPredictor:
     At Γ_AMOC ≈ 0.251, H* ≈ 0.50 K (50% weakening threshold).
 
     Compares with:
-    - Ditlevsen & Ditlevsen (2023) Nature Commun.: central 2057, range 2025–2095
+    - Ditlevsen & Ditlevsen (2023, corrected 2025) Nature Commun.: central
+      2065, range 2037-2109 (corrected 2026-08-02, was 2057/2025-2095)
     - Chavent et al. (2026) Science Advances: 50% weakening by 2100
     """
 

@@ -16,7 +16,7 @@ class AmocBenchmark:
         weakening_since_1950_Sv : (3.0,  rtol=0.33)
         gamma_amoc              : (0.251, atol=0.05)
         fov_sign                : "negative"
-        tipping_year_central    : (2057,  ±50 yr)
+        tipping_year_central    : (2065,  ±50 yr) -- corrected 2026-08-02 (was 2057)
     """
 
     def check_gamma(self, gamma: float) -> dict:
