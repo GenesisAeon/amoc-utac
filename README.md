@@ -12,7 +12,7 @@
 
 **AMOC modelled as UTAC dynamical system** with physics-based early-warning from van Westen et al. (2024).
 
-**Key result**: Γ_AMOC ≈ 0.251 (medium-CREP) → same universality point as neural criticality (η = 50 %).
+**Key result**: Γ_AMOC ≈ 0.251 (medium-CREP). Neural criticality (Package 20) lands at the same Γ because it shares the same η = 50 % and σ = 2.2 calibration inputs — a shared comparison coordinate, not evidence of shared physics between the two domains.
 
 ## Installation
 
@@ -76,6 +76,28 @@ return value (`ipcc_ar6_confidence_statement`, `ipcc_ar6_citation`,
 `consensus_note`) and in the `tipping-estimate` CLI command's output table,
 so users see the consensus baseline alongside this package's own (more
 alarmist) UTAC estimate rather than only the latter.
+
+## Global Trajectory Context (added 2026-09-02)
+
+UNEP's **"Limiting Overshoot: Navigating Exceedance of 1.5°C and Pathways
+Towards Return"** (UNEP, published 2026-09-02, DOI:
+[10.59117/20.500.11822/49857](https://doi.org/10.59117/20.500.11822/49857))
+assesses that current policies put the world on track for **~2.6°C
+warming by 2100**, with permanent exceedance of the 1.5°C Paris threshold
+expected within the next few years (2024 was already ~1.6°C above
+pre-industrial levels, per Copernicus/C3S). The report's central pathway
+is "overshoot, peak, and decline": exceed 1.5°C, then attempt to bring
+temperatures back down via large-scale carbon dioxide removal.
+
+**What this does and does not change here:** this package's own results
+(Γ_AMOC ≈ 0.251, the corrected Ditlevsen tipping-year estimate, the AR6
+SSP1-2.6/SSP5-8.5 weakening ranges) are not altered by this report — UNEP
+does not publish an AMOC-specific estimate. What it does provide is
+current, authoritative context for *which* emissions scenario is
+realistic: a ~2.6°C-by-2100 trajectory sits closer to the **SSP5-8.5**
+end of the `AR6_WEAKENING_SSP585_PCT` range in `constants.py` than to
+SSP1-2.6, which is worth keeping in mind when interpreting this
+package's output against the AR6 consensus band.
 
 ## Role in the GenesisAeon Ecosystem
 

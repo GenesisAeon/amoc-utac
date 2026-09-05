@@ -82,6 +82,19 @@ IPCC_AR6_CITATION: str = (
     "IPCC AR6 Working Group I, Summary for Policymakers (2021), Section C.3.4"
 )
 
+# ── Global trajectory context (added 2026-09-02, context only) ──────────────
+# UNEP, "Limiting Overshoot: Navigating Exceedance of 1.5C and Pathways
+# Towards Return" (2026-09-02), DOI 10.59117/20.500.11822/49857: current
+# policies put the world on a ~2.6 C-by-2100 trajectory, closer to the
+# SSP5-8.5 end of AR6_WEAKENING_SSP585_PCT above than to SSP1-2.6. Does NOT
+# change GAMMA_AMOC or the Ditlevsen/AR6 values -- UNEP publishes no
+# AMOC-specific estimate. See README.md "Global Trajectory Context".
+UNEP_OVERSHOOT_2026_CITATION: str = (
+    "UNEP (2026), \"Limiting Overshoot: Navigating Exceedance of 1.5C and "
+    "Pathways Towards Return\", DOI: 10.59117/20.500.11822/49857"
+)
+UNEP_OVERSHOOT_2026_PROJECTED_WARMING_C: float = 2.6  # by 2100, current-policy trajectory
+
 # ── Package registry ─────────────────────────────────────────────────────────
 PACKAGE_REGISTRY_18: dict = {
     "name": "amoc-utac",
