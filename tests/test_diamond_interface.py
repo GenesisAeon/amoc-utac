@@ -68,7 +68,11 @@ def test_run_cycle_time_series_lengths():
 
 def test_get_crep_state_keys(amoc: AmocUTAC):
     state = amoc.get_crep_state()
-    assert set(state.keys()) == {"C", "R", "E", "P", "Gamma"}
+    # diamond_setup >=2.3.0 adds an optional "bridge_adapted" flag to this
+    # dict; check the required core keys are present rather than pinning
+    # the exact set, so this test doesn't break on additive vendor-library
+    # fields.
+    assert {"C", "R", "E", "P", "Gamma"} <= set(state.keys())
 
 
 def test_get_crep_state_range(amoc: AmocUTAC):
