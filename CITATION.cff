@@ -18,8 +18,11 @@ abstract: >
   GenesisAeon Package 18. Models the Atlantic Meridional Overturning
   Circulation (AMOC) as a UTAC dynamical system with CREP tensor coupling.
   Central result: Γ_AMOC = arctanh(η=0.50) / σ=2.2 ≈ 0.251, placing AMOC
-  in the medium-CREP regime and establishing cross-domain universality with
-  neural criticality (Package 20) at the 50% homeostatic efficiency setpoint.
+  in the medium-CREP regime. Γ is a calibration within a comparison
+  coordinate system, not evidence of shared physics with other domains --
+  neural criticality (Package 20) lands at the same Γ because it shares
+  the same η and σ inputs, not because of an independently discovered
+  cross-domain law.
 
 keywords:
   - AMOC
