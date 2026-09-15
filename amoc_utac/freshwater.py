@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 
 
@@ -55,6 +57,8 @@ class FreshwaterTransport:
         """
         return float(1.0 / (1.0 + np.exp(fov / self.FOV_REF)))
 
-    def timeseries(self, amoc_sv: np.ndarray, noise_scale: float = 0.01) -> np.ndarray:
+    def timeseries(
+        self, amoc_sv: np.ndarray[Any, Any], noise_scale: float = 0.01
+    ) -> np.ndarray[Any, Any]:
         """Compute Fov time series from an AMOC strength array [Sv]."""
         return np.array([self.compute(h, noise_scale) for h in amoc_sv])

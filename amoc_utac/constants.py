@@ -1,6 +1,7 @@
 """Physical and model constants for amoc-utac (Package 18)."""
 
 import math
+from typing import Any
 
 # ── AMOC physical parameters ─────────────────────────────────────────────────
 AMOC_PRESENT_SV: float = 18.0       # Present AMOC strength (RAPID 2004–2023) [Sv]
@@ -15,6 +16,23 @@ UTAC_SEED: int = 42
 
 # ── CREP calibration ──────────────────────────────────────────────────────────
 # Central result: Γ_AMOC = arctanh(η=0.50) / σ=2.2 ≈ 0.251
+#
+# HONESTY NOTE (2026-09-15, ecosystem-wide Gamma-circularity review):
+# GAMMA_AMOC is arctanh of its own target (AMOC_TIPPING_ETA=0.50) divided
+# by UTAC_SIGMA=2.2 -- a shared default reused unchanged across unrelated
+# GenesisAeon UTAC packages (Amazon, Cygnus X-1 jets, solar flares, neural
+# avalanches, ...), never independently derived for AMOC specifically.
+# With one target ratio and two free parameters (Gamma, sigma), the split
+# is not identifiable from this alone: GAMMA_AMOC is a rescaling of the
+# 50% weakening projection, not an independent measurement, and is not
+# comparable to other domains' Gamma values (see
+# D:\mandala\crep-utac-afet-formalism\worked_example_amoc_utac.md and
+# FOLLOWUP_TICKETS.md for the full finding, including a second,
+# independent issue: the diagnostic Gamma computed in crep_amoc.py from
+# the simulated time series is never actually wired into
+# TippingPredictor's simulation -- only this fixed GAMMA_AMOC drives the
+# simulated tipping-year trajectory, despite docstrings elsewhere
+# suggesting the diagnostic Gamma "drifts" the fixed point).
 AMOC_TIPPING_ETA: float = 0.50      # 50% weakening projection (Chavent et al. 2026)
 GAMMA_AMOC: float = math.atanh(AMOC_TIPPING_ETA) / UTAC_SIGMA   # ≈ 0.2510
 
@@ -23,7 +41,7 @@ FOV_REF: float = 0.1                # Reference Fov [Sv] for sigmoid normalisati
 FOV_ALPHA: float = -0.05            # Calibrated Fov–AMOC coefficient
 
 # ── Benchmark targets (value, relative_tolerance) ────────────────────────────
-AMOC_TARGETS: dict = {
+AMOC_TARGETS: dict[str, Any] = {
     "present_strength_Sv":     (17.0, 0.15),
     "weakening_since_1950_Sv": (3.0,  0.33),
     "gamma_amoc":              (0.251, 0.05),
@@ -96,7 +114,7 @@ UNEP_OVERSHOOT_2026_CITATION: str = (
 UNEP_OVERSHOOT_2026_PROJECTED_WARMING_C: float = 2.6  # by 2100, current-policy trajectory
 
 # ── Package registry ─────────────────────────────────────────────────────────
-PACKAGE_REGISTRY_18: dict = {
+PACKAGE_REGISTRY_18: dict[str, Any] = {
     "name": "amoc-utac",
     "class": "AmocUTAC",
     "domain": "oceanography",

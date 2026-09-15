@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from amoc_utac.constants import ETHICS_TENSION_BLOCK, ETHICS_TENSION_WARN
 
 
@@ -29,9 +31,9 @@ class EthicsGate:
     ) -> None:
         self.warn_threshold = warn_threshold
         self.block_threshold = block_threshold
-        self._history: list[dict] = []
+        self._history: list[dict[str, Any]] = []
 
-    def check(self, state: dict, tension_value: float) -> dict:
+    def check(self, state: dict[str, Any], tension_value: float) -> dict[str, Any]:
         """Evaluate whether the current state may be published.
 
         Args:
@@ -84,6 +86,6 @@ class EthicsGate:
         return record
 
     @property
-    def history(self) -> list[dict]:
+    def history(self) -> list[dict[str, Any]]:
         """Full history of gate evaluations in this session."""
         return list(self._history)

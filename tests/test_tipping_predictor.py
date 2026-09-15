@@ -23,10 +23,14 @@ def test_h_star_at_gamma_amoc(predictor: TippingPredictor):
     assert abs(ratio - 0.50) < 0.02, f"η = {ratio:.3f}, expected ≈ 0.50"
 
 
-def test_h_star_increases_with_gamma(predictor: TippingPredictor):
+def test_h_star_decreases_with_gamma(predictor: TippingPredictor):
+    """H*(Gamma)=K*(1-tanh(sigma*Gamma)) decreases as forcing increases --
+    fixed 2026-09-15: was asserting the opposite (increasing) direction,
+    which matched the pre-fix formula but contradicted every cited source's
+    AMOC-weakening-under-forcing narrative. See h_star()'s docstring."""
     h1 = predictor.h_star(0.1)
     h2 = predictor.h_star(0.5)
-    assert h2 > h1
+    assert h2 < h1
 
 
 def test_h_star_bounded_by_k(predictor: TippingPredictor):

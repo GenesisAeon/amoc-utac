@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from itertools import permutations
+from typing import Any
 
 import numpy as np
 from scipy.signal import detrend
@@ -27,11 +28,11 @@ class AmocFingerprintIndex:
 
     def synthetic_index(
         self,
-        years: np.ndarray,
+        years: np.ndarray[Any, Any],
         trend_sv_per_decade: float = -0.3,
         noise_std: float = 1.5,
         phi: float = 0.85,
-    ) -> np.ndarray:
+    ) -> np.ndarray[Any, Any]:
         """Generate synthetic annual AMOC index [Sv].
 
         Linear trend + AR(1) noise calibrated to observed RAPID statistics
@@ -49,11 +50,13 @@ class AmocFingerprintIndex:
 
         return np.clip(trend + ar1, 0.0, 30.0)
 
-    def normalise_to_utac(self, strength_sv: np.ndarray) -> np.ndarray:
+    def normalise_to_utac(self, strength_sv: np.ndarray[Any, Any]) -> np.ndarray[Any, Any]:
         """Normalise AMOC strength [Sv] to UTAC state variable H ∈ [0, 1]."""
         return strength_sv / self.NORMALISATION_SV
 
-    def autocorrelation_ar1(self, series: np.ndarray, window: int = 30) -> np.ndarray:
+    def autocorrelation_ar1(
+        self, series: np.ndarray[Any, Any], window: int = 30
+    ) -> np.ndarray[Any, Any]:
         """Rolling AR(1) coefficient — critical slowing-down indicator.
 
         Approaches 1 as system nears tipping (loss of resilience).
@@ -70,10 +73,10 @@ class AmocFingerprintIndex:
 
     def permutation_entropy(
         self,
-        series: np.ndarray,
+        series: np.ndarray[Any, Any],
         order: int = 3,
         window: int = 30,
-    ) -> np.ndarray:
+    ) -> np.ndarray[Any, Any]:
         """Rolling normalised permutation entropy ∈ [0, 1].
 
         Lower PE → more ordered dynamics → approaching tipping.

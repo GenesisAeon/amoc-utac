@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from typing import Any
+
 import numpy as np
 from scipy.integrate import solve_ivp
 from scipy.stats import linregress
@@ -23,11 +26,13 @@ class TippingPredictor:
     AMOC tipping-year prediction via UTAC dynamics and linear extrapolation.
 
     UTAC ODE:
-        dH/dt = r · H · (tanh(σ · Γ(t)) − H/K)
+        dH/dt = r · H · ((1 − tanh(σ · Γ(t))) − H/K)
 
     As Γ increases under freshwater forcing, the fixed point
-        H*(t) = K · tanh(σ · Γ(t))
-    drifts below K, pulling H toward lower AMOC states.
+        H*(t) = K · (1 − tanh(σ · Γ(t)))
+    drifts below K, pulling H toward lower AMOC states. (Corrected
+    2026-09-15: previously K·tanh(σ·Γ(t)), which moved the wrong
+    direction -- see h_star()'s docstring for the verified fix.)
     At Γ_AMOC ≈ 0.251, H* ≈ 0.50 K (50% weakening threshold).
 
     Compares with:
@@ -53,15 +58,34 @@ class TippingPredictor:
     # ── UTAC fixed point ─────────────────────────────────────────────────────
 
     def h_star(self, gamma: float) -> float:
-        """UTAC fixed point: H*(Γ) = K · tanh(σ · Γ)."""
-        return self.K * float(np.tanh(self.sigma * gamma))
+        """UTAC fixed point: H*(Γ) = K · (1 − tanh(σ · Γ)).
+
+        SIGN FIX (2026-09-15, ecosystem-wide Gamma-circularity review): this
+        was previously K·tanh(σ·Γ), which is monotonically INCREASING in Γ
+        -- meaning increasing freshwater-forcing Γ pulled H* toward K (AMOC
+        strengthening), the opposite of every cited source's collapse/
+        weakening narrative and of this class's own docstring ("the fixed
+        point ... drifts below K"). Verified numerically: with the old
+        formula, simulate_utac() over 120 years moved H from 9.0 to 12.7
+        (Sv), i.e. strengthening, and predict_tipping_year()'s deterministic
+        run never crossed the tipping threshold at all (silently fell back
+        to start_year+120=2144). The corrected form is decreasing in Γ:
+        H*(0)=K (healthy AMOC), H*(Γ)→0 as Γ increases (collapse). Because
+        AMOC_TIPPING_ETA=0.50 is self-symmetric (1-0.50=0.50), GAMMA_AMOC
+        itself is unchanged by this fix -- only the direction of H*(Γ) for
+        Γ != Γ_AMOC was wrong. See
+        D:\\mandala\\crep-utac-afet-formalism\\FOLLOWUP_TICKETS.md.
+        """
+        return self.K * (1.0 - float(np.tanh(self.sigma * gamma)))
 
     # ── ODE integration ──────────────────────────────────────────────────────
 
-    def _ode(self, t: float, y: list[float], gamma_func) -> list[float]:  # type: ignore[type-arg]
+    def _ode(
+        self, t: float, y: list[float], gamma_func: Callable[[float], float]
+    ) -> list[float]:
         H = float(y[0])
         gamma = float(gamma_func(t))
-        h_star = self.K * float(np.tanh(self.sigma * gamma))
+        h_star = self.h_star(gamma)
         dH = self.r * H * (h_star / self.K - H / self.K)
         return [dH]
 
@@ -70,7 +94,7 @@ class TippingPredictor:
         t_span: tuple[float, float],
         H0: float | None = None,
         gamma_trend: float = 0.0015,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Integrate AMOC UTAC ODE with linearly increasing Γ(t).
 
         gamma_trend: Γ increase per year (represents freshwater forcing growth).
@@ -113,7 +137,7 @@ class TippingPredictor:
         start_year: int = 2024,
         gamma_trend: float = 0.0015,
         tipping_threshold: float = 0.50,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Predict year AMOC crosses H = tipping_threshold · K (default: 50%).
 
         Runs 100-member Monte Carlo ensemble for uncertainty bounds.
@@ -181,9 +205,9 @@ class TippingPredictor:
 
     def statistical_tipping_estimate(
         self,
-        amoc_series: np.ndarray,
-        years: np.ndarray,
-    ) -> dict:
+        amoc_series: np.ndarray[Any, Any],
+        years: np.ndarray[Any, Any],
+    ) -> dict[str, Any]:
         """Linear-trend extrapolation to 50% weakening.
 
         Cross-check with UTAC prediction (linear model underestimates urgency

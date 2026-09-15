@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 
 
@@ -20,6 +22,16 @@ class CREPAmocTensor:
 
     Calibrated so that present-day AMOC gives Γ ≈ 0.251
     (medium-CREP regime; η = 50% efficiency setpoint).
+
+    HONESTY NOTE (2026-09-15, ecosystem-wide Gamma-circularity review): this
+    is a real, non-circular, data-driven computation -- but (a) the AMOC
+    time series it is fed is currently always the fully synthetic output of
+    RapidLoader.synthetic_annual() (see that method's docstring), never real
+    RAPID array data, and (b) the Gamma this class computes is NOT actually
+    wired into TippingPredictor's simulation, which uses only the fixed,
+    circular GAMMA_AMOC constant instead (see
+    D:\\mandala\\crep-utac-afet-formalism\\worked_example_amoc_utac.md
+    section 4 for the verified code-path trace).
     """
 
     SIGMA: float = 2.2
@@ -30,7 +42,7 @@ class CREPAmocTensor:
 
     # ── Individual components ────────────────────────────────────────────────
 
-    def compute_c(self, ar1_series: np.ndarray) -> float:
+    def compute_c(self, ar1_series: np.ndarray[Any, Any]) -> float:
         """C: trend-normalised AR(1) increase — critical slowing-down signal.
 
         Measures the *increase* in AR(1) from baseline to present, normalised
@@ -58,7 +70,7 @@ class CREPAmocTensor:
 
     def compute_e(
         self,
-        amoc_series: np.ndarray,
+        amoc_series: np.ndarray[Any, Any],
         short_window: int = 10,
         long_window: int = 50,
     ) -> float:
@@ -71,7 +83,7 @@ class CREPAmocTensor:
             return 0.0
         return float(np.clip(var_short / var_long / 4.0, 0.0, 1.0))
 
-    def compute_p(self, pe_series: np.ndarray) -> float:
+    def compute_p(self, pe_series: np.ndarray[Any, Any]) -> float:
         """P: current permutation entropy level ∈ [0, 1].
 
         Composed into Γ as (1 − P): lower entropy → higher CREP contribution.
@@ -92,10 +104,10 @@ class CREPAmocTensor:
 
     def compute_all(
         self,
-        ar1_series: np.ndarray,
+        ar1_series: np.ndarray[Any, Any],
         fov: float,
-        amoc_series: np.ndarray,
-        pe_series: np.ndarray,
+        amoc_series: np.ndarray[Any, Any],
+        pe_series: np.ndarray[Any, Any],
     ) -> dict[str, float]:
         """Compute all components and return full CREP state dict."""
         C = self.compute_c(ar1_series)

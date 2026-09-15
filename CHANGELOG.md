@@ -7,6 +7,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.3.3] - 2026-09-15
+
+### Fixed (real behavior change: `predict_tipping_year()`/`simulate_utac()` output)
+- **Sign error in `TippingPredictor.h_star()`**: was `K·tanh(σ·Γ)`
+  (increasing in Γ), meaning increasing freshwater-forcing Γ pulled the
+  fixed point TOWARD K — i.e. the model predicted AMOC *strengthening*
+  under increasing forcing, the opposite of every cited source's
+  collapse/weakening narrative and of this class's own docstring
+  ("the fixed point ... drifts below K"). Verified numerically before
+  the fix: `simulate_utac()` over 120 years moved H from 9.0 to 12.7 Sv
+  (strengthening), and the deterministic tipping-year run never crossed
+  the threshold at all, silently falling back to `start_year+120=2144`.
+  Corrected to `K·(1 − tanh(σ·Γ))` (decreasing in Γ). Because
+  `AMOC_TIPPING_ETA=0.50` is self-symmetric (1−0.50=0.50), `GAMMA_AMOC`
+  itself is unchanged — only H*(Γ) for Γ ≠ Γ_AMOC was wrong. After the
+  fix, `simulate_utac()` correctly shows weakening (9.0 → 5.8 Sv over
+  120 years) and `predict_tipping_year()`'s Monte Carlo ensemble shows
+  a non-degenerate spread (previously identical 5th/95th percentiles).
+  `system.py`'s duplicate inline formula and `tipping_predictor.py`'s
+  `_ode()` were also updated/refactored to call the corrected
+  `h_star()` instead of duplicating the (now-fixed) formula, preventing
+  future drift between the two. `tests/test_tipping_predictor.py`'s
+  `test_h_star_increases_with_gamma` (which encoded the old, wrong
+  direction as a passing assertion) renamed to
+  `test_h_star_decreases_with_gamma` with the corrected expectation.
+
+### Fixed (documentation/metadata honesty, no further numeric value change)
+- **Ecosystem-wide Γ-circularity review**: added an explicit honesty
+  note to `GAMMA_AMOC` in `constants.py` (rescaling of a real 50%
+  weakening projection via a shared, cross-package `UTAC_SIGMA=2.2`
+  default never independently derived for AMOC). Corrected `system.py`'s
+  class docstring, which claimed "same as Γ_brain — cross-domain
+  universality" (the numeric match is an artifact of the shared sigma
+  default, not shared physics — `README.md`/`CITATION.cff` already
+  documented this correctly; the class docstring did not match).
+  Labelled `benchmark.py`'s `gamma_formula_check()` as an arithmetic
+  self-consistency check, not empirical validation. Documented in
+  `rapid_loader.py` and `crep_amoc.py` that the "diagnostic" Gamma
+  computed from the AMOC time series is (a) computed from a fully
+  synthetic generator (hardcoded post-2050 exponential collapse), never
+  real RAPID array data, and (b) not actually wired into
+  `TippingPredictor`'s simulation, which uses only the fixed
+  `GAMMA_AMOC` constant — a real, independently verified but
+  intentionally undisturbed finding (fixing the wiring would not add
+  genuine validation, since the diagnostic Gamma is itself
+  synthetic-data-derived). See
+  `D:\mandala\crep-utac-afet-formalism\worked_example_amoc_utac.md` and
+  `FOLLOWUP_TICKETS.md` for the full analysis.
+
+### Fixed (CI/typing only, no behavior change)
+- 43 pre-existing `mypy --strict` errors (missing generic type
+  parameters on `dict`/`np.ndarray`, an unused `type: ignore` combined
+  with a genuinely missing parameter annotation on `_ode()`'s
+  `gamma_func`, and the standard `DiamondPackage`-subclass/`Any`-return
+  suppressions already used elsewhere in the ecosystem, e.g.
+  `scope-resilience`) across 9 files. Not yet caught by CI (last run
+  2026-09-05, predates a numpy release that changed stub strictness)
+  but reproduced locally with the current unpinned `numpy` release.
+
 ## [1.3.0] - 2026-08-02
 ### Fixed
 - **Ditlevsen & Ditlevsen (2023) was itself corrected in 2025** (Author

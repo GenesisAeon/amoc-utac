@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import yaml
@@ -39,7 +40,7 @@ class RapidLoader:
     # ── Public API ───────────────────────────────────────────────────────────
 
     @property
-    def summary(self) -> dict:
+    def summary(self) -> dict[str, Any]:
         return dict(self._summary)
 
     def present_state(self) -> dict[str, float]:
@@ -54,7 +55,7 @@ class RapidLoader:
         self,
         start: int = 1950,
         end: int = 2100,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray[Any, Any], np.ndarray[Any, Any]]:
         """Generate synthetic annual AMOC time series [Sv].
 
         Calibration:
@@ -63,6 +64,16 @@ class RapidLoader:
         - Slow post-2004 weakening (−0.5 Sv/decade, RAPID trend)
         - Accelerating toward tipping post-2050 (SSP2-4.5 scenario)
         - AR(1) noise (φ = 0.80) superimposed
+
+        HONESTY NOTE (2026-09-15, ecosystem-wide Gamma-circularity review):
+        this entire series is synthetically generated, including a hardcoded
+        post-2050 exponential collapse (see below) -- it is NOT real RAPID
+        array data. system.py's diagnostic Gamma (crep_amoc.py) is computed
+        from THIS synthetic series, not from real observations, so its
+        "early warning signal" behavior is a property of this generator's
+        construction, not a measured physical finding. See
+        D:\\mandala\\crep-utac-afet-formalism\\worked_example_amoc_utac.md
+        section 5 for the full analysis.
 
         Returns: (years, amoc_sv)
         """
@@ -96,11 +107,11 @@ class RapidLoader:
     # ── Internals ────────────────────────────────────────────────────────────
 
     @staticmethod
-    def _load_yaml(path: Path) -> dict:
+    def _load_yaml(path: Path) -> dict[str, Any]:
         with path.open() as fh:
             return yaml.safe_load(fh)  # type: ignore[no-any-return]
 
-    def _default_summary(self) -> dict:
+    def _default_summary(self) -> dict[str, Any]:
         return {
             "source": "RAPID-MOCHA 26°N array",
             "period": "2004-2023",

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import math
 from datetime import datetime, timezone
 from typing import Any
 
@@ -32,7 +31,7 @@ from amoc_utac.tension_metric import TensionMetric
 from amoc_utac.tipping_predictor import TippingPredictor
 
 
-class AmocUTAC(DiamondPackage):
+class AmocUTAC(DiamondPackage):  # type: ignore[misc]
     """
     Atlantic Meridional Overturning Circulation UTAC System.
 
@@ -45,10 +44,16 @@ class AmocUTAC(DiamondPackage):
 
     Physical mapping:
         H(t)  ← AMOC strength [Sv], normalised by K = 18 Sv for UTACState.H
-        H*    ← K · tanh(σ · Γ) ≈ 0.50 · K  (50% weakening setpoint)
-        Γ     ≈ 0.251  (medium-CREP; same as Γ_brain — cross-domain universality)
+        H*    ← K · (1 − tanh(σ · Γ)) ≈ 0.50 · K  (50% weakening setpoint;
+                sign corrected 2026-09-15, see tipping_predictor.h_star())
+        Γ     ≈ 0.251  (medium-CREP)
         r     ≈ 0.08 yr⁻¹  (intrinsic recovery rate)
-        σ     = 2.2  (CREP coupling constant)
+        σ     = 2.2  (CREP coupling constant, shared across GenesisAeon
+                UTAC packages -- NOT independently derived for AMOC; see
+                constants.py's GAMMA_AMOC docstring. The apparent numeric
+                match to neural-avalanche-utac's Γ_brain is an artifact of
+                that shared constant, not evidence of cross-domain
+                universality -- see FOLLOWUP_TICKETS.md.)
 
     Central result:
         Γ_AMOC = arctanh(η=0.50) / σ=2.2 ≈ 0.251
@@ -87,15 +92,15 @@ class AmocUTAC(DiamondPackage):
         self._tension_metric = TensionMetric()
         self._ethics_gate = EthicsGate()
 
-        self._years: np.ndarray | None = None
-        self._amoc_sv: np.ndarray | None = None
-        self._fov: np.ndarray | None = None
-        self._ar1: np.ndarray | None = None
-        self._pe: np.ndarray | None = None
+        self._years: np.ndarray[Any, Any] | None = None
+        self._amoc_sv: np.ndarray[Any, Any] | None = None
+        self._fov: np.ndarray[Any, Any] | None = None
+        self._ar1: np.ndarray[Any, Any] | None = None
+        self._pe: np.ndarray[Any, Any] | None = None
         self._crep_components: dict[str, float] | None = None
         self._utac_internal: dict[str, float] | None = None
         self._phase_events: list[dict[str, Any]] | None = None
-        self._utac_sim: dict[str, np.ndarray] | None = None
+        self._utac_sim: dict[str, np.ndarray[Any, Any]] | None = None
         self._start_year: int = 2024
         self._last_ethics: dict[str, Any] | None = None
 
@@ -103,7 +108,7 @@ class AmocUTAC(DiamondPackage):
         """Execute one AMOC-UTAC cycle (optional *duration_years* override)."""
         if duration_years is not None:
             self._duration_years = duration_years
-        return super().run_cycle()
+        return super().run_cycle()  # type: ignore[no-any-return]
 
     def _run_cycle(self) -> dict[str, Any]:
         duration_years = self._duration_years
@@ -138,7 +143,7 @@ class AmocUTAC(DiamondPackage):
         )
 
         h_now = float(self._utac_sim["H"][0])
-        h_star = self.K * math.tanh(self.sigma * gamma)
+        h_star = self._predictor.h_star(gamma)
         dh_dt = self.r * h_now * (h_star / self.K - h_now / self.K)
         self._utac_internal = {
             "H_sv": h_now,
